@@ -29,3 +29,21 @@ class Client(object):
             products.append('basecamp')
         return filter(lambda a: a['product'] in products,
                       self.accounts()['accounts'])
+
+class BasicClient(object):
+    '''Client using basic authentication instead of OAuth2'''
+
+    LAUNCHPAD_URL = 'https://launchpad.37signals.com/'
+    BASE_URL = 'https://basecamp.com/%s/api/v1/'
+
+    def __init__(self, user, password, user_agent, account_id=None):
+        """Initialize client for making requests.
+
+        user_agent -- string identifying the app, and an url or email related
+        to the app; e.g. "BusyFlow (http://busyflow.com)".
+        """
+        self.account_id = account_id
+        self.session = requests.session(
+                auth = (user, password),
+                headers={'User-Agent': user_agent,
+                         'Content-Type': 'application/json; charset=utf-8'})
